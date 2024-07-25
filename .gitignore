@@ -16,7 +16,7 @@ coverage
 coverage/*
 
 app-example/
-scripts/
+scripts/*
 
 # macOS
 .DS_Store
