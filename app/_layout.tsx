@@ -18,7 +18,7 @@ export default function RootLayout() {
       }}
     >
       <Stack.Screen name="index" />
-      <Stack.Screen name="create" />
+      <Stack.Screen name="task" />
       <Stack.Screen name="+not-found" />
     </Stack>
   );

@@ -1,30 +1,57 @@
 import { View, Text, TextInput, Button, StyleSheet } from 'react-native';
-import { useState } from 'react';
-import { Link, router } from 'expo-router';
+import { useEffect, useState } from 'react';
+import { Link, router, useLocalSearchParams, useRouter } from 'expo-router';
 import { store } from '@/src/store/store';
 import CustomButton from '@/src/components/CustomButton';
+import ITask from '@/src/model/Task';
 
-export default function Create() {
-  const { addTask } = store((state) => ({ addTask: state.addTask }));
-  const [title, setTitle] = useState('');
-  const [description, setDescription] = useState('');
+const Task: React.FC = () => {
+  const { addTask, updateTask } = store((state) => ({
+    addTask: state.addTask,
+    updateTask: state.updateTask,
+  }));
+
+  const router = useRouter();
+  const { taskId } = useLocalSearchParams();
+
+  const existingTask = store
+    .getState()
+    .tasks.find((task) => task.id === Number(taskId));
+
+  const [title, setTitle] = useState(existingTask?.title || '');
+  const [description, setDescription] = useState(
+    existingTask?.description || ''
+  );
   const [error, setError] = useState('');
 
-  const handleSave = () => {
+  const handleSave = (): void => {
     if (title.trim() === '') {
       setError('Please fill in the title');
-    } else {
-      addTask({ title, description, completed: false });
-      setTitle('');
-      setDescription('');
-      setError('');
-      router.push('/');
+      return;
     }
+
+    existingTask
+      ? updateTask(existingTask.id, { title, description })
+      : addTask({ title, description, completed: false });
+
+    setTitle('');
+    setDescription('');
+    setError('');
+    router.push('/');
   };
+
+  useEffect(() => {
+    if (existingTask) {
+      setTitle(existingTask.title);
+      setDescription(existingTask.description);
+    }
+  }, [existingTask]);
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Create New ToDo</Text>
+      <Text style={styles.title}>
+        {existingTask ? 'Edit Task' : 'Create New Task'}
+      </Text>
       <TextInput
         style={[styles.input, error ? styles.inputError : null]}
         placeholder="Title"
@@ -52,12 +79,15 @@ export default function Create() {
         onPress={handleSave}
         disabled={!!error}
       ></CustomButton>
-      <Link href="/" style={styles.link}>
-        <Text style={styles.linkText}>Cancel</Text>
-      </Link>
+      <CustomButton
+        title="Cancel"
+        onPress={() => router.push('/')}
+        buttonStyle={{ backgroundColor: '#dfb2ff' }}
+        textStyle={{ color: '#7000ff' }}
+      />
     </View>
   );
-}
+};
 
 const styles = StyleSheet.create({
   container: {
@@ -79,12 +109,13 @@ const styles = StyleSheet.create({
     borderRadius: 5,
   },
   inputError: {
-    borderColor: 'red',
+    borderColor: '#ff0000',
   },
   inputDescription: {
     minHeight: 150,
     textAlignVertical: 'top',
     paddingTop: 10,
+    marginBottom: 20,
   },
   errorText: {
     opacity: 0,
@@ -101,3 +132,5 @@ const styles = StyleSheet.create({
     color: '#fff',
   },
 });
+
+export default Task;

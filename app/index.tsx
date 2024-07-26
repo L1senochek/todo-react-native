@@ -2,7 +2,7 @@ import CustomButton from '@/src/components/CustomButton';
 import ScreenWrapper from '@/src/components/ScreenWrapper';
 import ITask from '@/src/model/Task';
 import { store } from '@/src/store/store';
-import { Link } from 'expo-router';
+import { Link, router } from 'expo-router';
 import { FlatList, StyleSheet, Text, View } from 'react-native';
 
 export default function Index() {
@@ -32,7 +32,10 @@ export default function Index() {
           title={item.completed ? 'Uncomplete' : 'Complete'}
           onPress={() => toggleTaskStatus(item.id)}
         />
-        <CustomButton title="Edit" />
+        <CustomButton
+          title="Edit"
+          onPress={() => router.push(`/task?taskId=${item.id}`)}
+        />
         <CustomButton title="Delete" onPress={() => deleteTask(item.id)} />
       </View>
     </View>
@@ -42,7 +45,7 @@ export default function Index() {
     <ScreenWrapper>
       <View style={styles.container}>
         <Text style={styles.title}>ToDo List</Text>
-        <Link href="/create" style={styles.addButton}>
+        <Link href="/task" style={styles.addButton}>
           <Text style={styles.addButtonText}>Add New Task</Text>
         </Link>
         <FlatList
