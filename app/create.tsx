@@ -2,6 +2,7 @@ import { View, Text, TextInput, Button, StyleSheet } from 'react-native';
 import { useState } from 'react';
 import { Link, router } from 'expo-router';
 import { store } from '@/src/store/store';
+import CustomButton from '@/src/components/CustomButton';
 
 export default function Create() {
   const { addTask } = store((state) => ({ addTask: state.addTask }));
@@ -25,12 +26,14 @@ export default function Create() {
         onChangeText={setTitle}
       />
       <TextInput
-        style={styles.input}
+        style={[styles.input, styles.inputDescription]}
         placeholder="Description"
         value={description}
         onChangeText={setDescription}
+        multiline
+        numberOfLines={5}
       />
-      <Button title="Save" onPress={handleSave} />
+      <CustomButton title="Save" onPress={handleSave}></CustomButton>
       <Link href="/" style={styles.link}>
         <Text style={styles.linkText}>Cancel</Text>
       </Link>
@@ -55,12 +58,18 @@ const styles = StyleSheet.create({
     marginBottom: 20,
     paddingHorizontal: 10,
     color: '#fff',
+    borderRadius: 5,
+  },
+  inputDescription: {
+    minHeight: 150,
+    textAlignVertical: 'top',
+    paddingTop: 10,
   },
   link: {
     marginTop: 20,
     textAlign: 'center',
   },
   linkText: {
-    color: '#007BFF',
+    color: '#fff',
   },
 });
