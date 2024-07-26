@@ -1,7 +1,9 @@
+import CustomButton from '@/src/components/CustomButton';
+import ScreenWrapper from '@/src/components/ScreenWrapper';
 import ITask from '@/src/model/Task';
 import { store } from '@/src/store/store';
 import { Link } from 'expo-router';
-import { Button, FlatList, StyleSheet, Text, View } from 'react-native';
+import { FlatList, StyleSheet, Text, View } from 'react-native';
 
 export default function Index() {
   const { tasks, toggleTaskStatus, deleteTask } = store((state) => ({
@@ -11,58 +13,85 @@ export default function Index() {
   }));
 
   const renderItem = ({ item }: { item: ITask }) => (
-    <View style={styles.taskContainer}>
+    <View
+      style={[
+        styles.taskContainer,
+        item.completed && styles.completedTaskContainer,
+      ]}
+    >
       <Text
-        style={{ textDecorationLine: item.completed ? 'line-through' : 'none' }}
+        style={{
+          textDecorationLine: item.completed ? 'line-through' : 'none',
+          color: '#fff',
+        }}
       >
         {item.title}
       </Text>
       <View style={styles.buttonContainer}>
-        <Button
-          title={item.completed ? 'Undo' : 'Complete'}
+        <CustomButton
+          title={item.completed ? 'Uncomplete' : 'Complete'}
           onPress={() => toggleTaskStatus(item.id)}
         />
-        <Button title="Edit" />
-        <Button title="Delete" onPress={() => deleteTask(item.id)} />
+        <CustomButton title="Edit" />
+        <CustomButton title="Delete" onPress={() => deleteTask(item.id)} />
       </View>
     </View>
   );
 
   return (
-    <View style={styles.container}>
-      <Text style={styles.title}>ToDo List</Text>
-      <Link href="/create" style={styles.addButton}>
-        <Text style={styles.addButtonText}>Add New Task</Text>
-      </Link>
-      <FlatList
-        data={tasks}
-        renderItem={renderItem}
-        keyExtractor={(item) => item.id.toString()}
-      />
-    </View>
+    <ScreenWrapper>
+      <View style={styles.container}>
+        <Text style={styles.title}>ToDo List</Text>
+        <Link href="/create" style={styles.addButton}>
+          <Text style={styles.addButtonText}>Add New Task</Text>
+        </Link>
+        <FlatList
+          data={tasks}
+          renderItem={renderItem}
+          keyExtractor={(item) => item.id.toString()}
+          style={styles.flatList}
+        />
+      </View>
+    </ScreenWrapper>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
-    display: 'flex',
-    alignItems: 'center',
     flex: 1,
     padding: 20,
+    backgroundColor: '#0e0023',
+    color: '#fff',
+    gap: 20,
   },
   title: {
     fontSize: 24,
     marginBottom: 20,
+    display: 'flex',
+    justifyContent: 'center',
+    fontWeight: 400,
+    color: '#fff',
   },
   taskContainer: {
-    flexDirection: 'row',
     justifyContent: 'space-between',
-    alignItems: 'center',
     paddingVertical: 10,
+    flexDirection: 'column',
+    alignItems: 'stretch',
+    gap: 30,
+    borderColor: '#9600ff5c',
+    borderStyle: 'solid',
+    borderRadius: 5,
+    padding: 20,
+    backgroundColor: '#20003ebd',
+    marginBottom: 20,
+  },
+  completedTaskContainer: {
+    backgroundColor: '#20003e59',
   },
   buttonContainer: {
     flexDirection: 'row',
     gap: 10,
+    justifyContent: 'flex-end',
   },
   addButton: {
     display: 'flex',
@@ -72,10 +101,13 @@ const styles = StyleSheet.create({
     padding: 10,
     borderRadius: 5,
     marginBottom: 20,
-    maxWidth: 200,
   },
   addButtonText: {
-    color: '#FFF',
+    color: '#fff',
     textAlign: 'center',
+  },
+  flatList: {
+    gap: 20,
+    color: '#fff',
   },
 });
