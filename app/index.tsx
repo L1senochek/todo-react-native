@@ -12,7 +12,7 @@ export default function Index() {
     deleteTask: state.deleteTask,
   }));
 
-  const renderItem = ({ item }: { item: ITask }) => (
+  const renderItem = ({ item }: { item: ITask }): React.JSX.Element => (
     <View
       style={[
         styles.taskContainer,
@@ -30,13 +30,16 @@ export default function Index() {
       <View style={styles.buttonContainer}>
         <CustomButton
           title={item.completed ? 'Uncomplete' : 'Complete'}
-          onPress={() => toggleTaskStatus(item.id)}
+          onPress={(): void => toggleTaskStatus(item.id)}
         />
         <CustomButton
           title="Edit"
-          onPress={() => router.push(`/task?taskId=${item.id}`)}
+          onPress={(): void => router.push(`/task?taskId=${item.id}`)}
         />
-        <CustomButton title="Delete" onPress={() => deleteTask(item.id)} />
+        <CustomButton
+          title="Delete"
+          onPress={(): void => deleteTask(item.id)}
+        />
       </View>
     </View>
   );
@@ -51,7 +54,7 @@ export default function Index() {
         <FlatList
           data={tasks}
           renderItem={renderItem}
-          keyExtractor={(item) => item.id.toString()}
+          keyExtractor={(item: ITask): string => item.id.toString()}
           style={styles.flatList}
         />
       </View>
@@ -85,7 +88,7 @@ const styles = StyleSheet.create({
     borderStyle: 'solid',
     borderRadius: 5,
     padding: 20,
-    backgroundColor: '#20003ebd',
+    backgroundColor: '#28005bd4',
     marginBottom: 20,
   },
   completedTaskContainer: {

@@ -3,9 +3,8 @@ import { useEffect, useState } from 'react';
 import { Link, router, useLocalSearchParams, useRouter } from 'expo-router';
 import { store } from '@/src/store/store';
 import CustomButton from '@/src/components/CustomButton';
-import ITask from '@/src/model/Task';
 
-const Task: React.FC = () => {
+const Task: React.FC = (): React.JSX.Element => {
   const { addTask, updateTask } = store((state) => ({
     addTask: state.addTask,
     updateTask: state.updateTask,
@@ -18,11 +17,11 @@ const Task: React.FC = () => {
     .getState()
     .tasks.find((task) => task.id === Number(taskId));
 
-  const [title, setTitle] = useState(existingTask?.title || '');
-  const [description, setDescription] = useState(
+  const [title, setTitle] = useState<string>(existingTask?.title || '');
+  const [description, setDescription] = useState<string>(
     existingTask?.description || ''
   );
-  const [error, setError] = useState('');
+  const [error, setError] = useState<string>('');
 
   const handleSave = (): void => {
     if (title.trim() === '') {
@@ -40,7 +39,7 @@ const Task: React.FC = () => {
     router.push('/');
   };
 
-  useEffect(() => {
+  useEffect((): void => {
     if (existingTask) {
       setTitle(existingTask.title);
       setDescription(existingTask.description);
@@ -113,7 +112,7 @@ const styles = StyleSheet.create({
   },
   inputDescription: {
     minHeight: 150,
-    textAlignVertical: 'top',
+    verticalAlign: 'top',
     paddingTop: 10,
     marginBottom: 20,
   },

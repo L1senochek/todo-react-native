@@ -1,11 +1,11 @@
 import React from 'react';
 import { View, StyleSheet } from 'react-native';
 
-interface ScreenWrapperProps {
+interface IScreenWrapperProps {
   children: React.ReactNode;
 }
 
-const ScreenWrapper: React.FC<ScreenWrapperProps> = ({ children }) => {
+const ScreenWrapper: React.FC<IScreenWrapperProps> = ({ children }) => {
   return <View style={styles.container}>{children}</View>;
 };
 

@@ -1,15 +1,15 @@
 import React from 'react';
 import {
-  TouchableOpacity,
   Text,
   StyleSheet,
-  TouchableOpacityProps,
   ViewStyle,
   StyleProp,
   TextStyle,
+  PressableProps,
+  Pressable,
 } from 'react-native';
 
-interface ICustomButtonProps extends TouchableOpacityProps {
+interface ICustomButtonProps extends PressableProps {
   title: string;
   buttonStyle?: StyleProp<ViewStyle>;
   textStyle?: StyleProp<TextStyle>;
@@ -23,13 +23,13 @@ const CustomButton: React.FC<ICustomButtonProps> = ({
   ...props
 }): React.JSX.Element => {
   return (
-    <TouchableOpacity
+    <Pressable
       style={[styles.button, buttonStyle]}
       onPress={onPress}
       {...props}
     >
       <Text style={[styles.buttonText, textStyle]}>{title}</Text>
-    </TouchableOpacity>
+    </Pressable>
   );
 };
 
